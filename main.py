@@ -30,7 +30,7 @@ def index():
     return f'{db_manager.ping()}'
 
 
-@app.route('/api/user/<phone>', methods=['GET'])
+@app.route('/api/users/<phone>', methods=['GET'])
 def get_user(phone):
     user = db_manager.Users.get(phone)
     return user.__dict__ if user else flask.Response(status=404)
