@@ -7,5 +7,10 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 socketio = fl_sock.SocketIO(app)
 
 
+@app.route('/')
+def index():
+    return 'Привет!'
+
+
 if __name__ == '__main__':
     socketio.run(app)
