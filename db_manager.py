@@ -102,4 +102,13 @@ class Groups:
         """)
         return [User(*user_args) for user_args in cursor.fetchall()]
 
-
+    @staticmethod
+    @postgres_wrapper
+    def create(cursor, owner_id: int) -> Group:
+        cursor.execute(f"""
+        INSERT INTO groups
+        VALUES (DEFAULT, {owner_id})
+        RETURNING pk_id, owner_id
+        """)
+        group_args = cursor.fetchall()
+        return Group(*group_args)

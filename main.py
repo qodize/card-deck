@@ -2,7 +2,6 @@ import datetime as dt
 import os
 import logging
 
-import flask
 import flask as fl
 import flask_socketio as fl_sock
 import config
@@ -33,7 +32,7 @@ def index():
 @app.route('/api/users/<phone>', methods=['GET'])
 def get_user(phone):
     user = db_manager.Users.get(phone)
-    return user.__dict__ if user else flask.Response(status=404)
+    return user.__dict__ if user else fl.Response(status=404)
 
 
 @app.route('/api/users/<user_id>/groups', methods=['GET'])
@@ -46,6 +45,16 @@ def get_user_groups(user_id):
 def get_group_users(group_id):
     users = db_manager.Groups.get_group_users(group_id)
     return {'users': [user.__dict__ for user in users]}
+
+
+@app.route("/api/groups/", methods=['POST'])
+def create_group():
+    data = fl.request.json
+    owner_id = data.get('owner_id')
+    if not owner_id:
+        return fl.Response(status=400)
+    group = db_manager.Groups.create(owner_id)
+    return group.__dict__
 
 
 if __name__ == '__main__':
