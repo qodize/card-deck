@@ -4,6 +4,7 @@ import logging
 import flask as fl
 import flask_socketio as fl_sock
 import config
+from db_manager import ping
 
 os.makedirs('/tmp/cardlog', exist_ok=True)
 logging.basicConfig(
@@ -21,9 +22,10 @@ socketio = fl_sock.SocketIO(app, async_mode=async_mode, path='socket.io', cors_a
                                                                                         "http://localhost:4201",
                                                                                         "https://gusev.vladislav.ru"])
 
+
 @app.route('/')
 def index():
-    return 'Привет!'
+    return f'{ping()}'
 
 
 if __name__ == '__main__':
