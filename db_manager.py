@@ -31,10 +31,10 @@ class User:
 @dataclasses.dataclass
 class Emotion:
     id: int
-    user_id: int
     value: int
-    title: str
     description: str
+    user_id: int
+    title: str
     ts: dt.datetime
 
 
