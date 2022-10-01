@@ -1,10 +1,12 @@
 import datetime as dt
 import os
 import logging
+
+import flask
 import flask as fl
 import flask_socketio as fl_sock
 import config
-from db_manager import ping
+import db_manager
 
 os.makedirs('/tmp/cardlog', exist_ok=True)
 logging.basicConfig(
@@ -25,7 +27,13 @@ socketio = fl_sock.SocketIO(app, async_mode=async_mode, path='socket.io', cors_a
 
 @app.route('/')
 def index():
-    return f'{ping()}'
+    return f'{db_manager.ping()}'
+
+
+@app.route('/api/user/<phone>', methods=['GET'])
+def get_user(phone):
+    user = db_manager.Users.get(phone)
+    return user.__dict__ if user else flask.Response(status=404)
 
 
 if __name__ == '__main__':
