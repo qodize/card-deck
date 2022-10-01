@@ -15,7 +15,7 @@ def postgres_wrapper(func):
                               password=pg_password,
                               host=pg_host) as conn:
             with conn.cursor() as cursor:
-                return func(cursor, args, kwargs)
+                return func(cursor, *args, **kwargs)
 
     return wrap
 
