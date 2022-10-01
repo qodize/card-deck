@@ -36,7 +36,7 @@ def get_user(phone):
     return user.__dict__ if user else flask.Response(status=404)
 
 
-@app.route('api/groups/<user_id>', methods=['GET'])
+@app.route('/api/groups/<user_id>', methods=['GET'])
 def get_groups(user_id):
     groups = db_manager.Groups.get(user_id)
     return {'groups': [group.__dict__ for group in groups]}
