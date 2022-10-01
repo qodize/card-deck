@@ -110,7 +110,7 @@ class Groups:
         VALUES (DEFAULT, {owner_id})
         RETURNING pk_id, owner_id
         """)
-        group_args = cursor.fetchall()
+        group_args = cursor.fetchall()[0]
         cursor.execute(f"""
         INSERT INTO user_to_group VALUES ({group_args[1]}, {group_args[0]})
         """)
