@@ -5,10 +5,10 @@ import flask as fl
 import flask_socketio as fl_sock
 import config
 
-os.makedirs('./logs', exist_ok=True)
+os.makedirs('var/log/card', exist_ok=True)
 logging.basicConfig(
     level=logging.DEBUG,
-    handlers=[logging.FileHandler(f'logs/{dt.datetime.now().isoformat()}.log')]
+    handlers=[logging.FileHandler(f'var/log/card/{dt.datetime.now().isoformat()}.log')]
 )
 
 
