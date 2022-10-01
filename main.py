@@ -40,6 +40,8 @@ def get_user(phone):
 @app.route('/api/users/<user_id>/groups', methods=['GET'])
 def get_user_groups(user_id):
     groups = db_manager.Users.get_user_groups(user_id)
+    for group in groups:
+        group.users = db_manager.Groups.get_group_users(group.id)
     return {'groups': [group.__dict__ for group in groups]}
 
 
