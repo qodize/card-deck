@@ -73,7 +73,7 @@ class Users:
     @postgres_wrapper
     def create(cursor, phone: str, username: str) -> User:
         try:
-            cursor.execute(f"INSERT INTO users VALUES ('{phone}', '{username}') RETURNING id")
+            cursor.execute(f"INSERT INTO users VALUES (DEFAULT, '{phone}', '{username}') RETURNING id")
         except psycopg2.Error:
             raise AlreadyExists()
         id_ = cursor.fetchall()[0][0]
