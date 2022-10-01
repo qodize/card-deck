@@ -29,4 +29,4 @@ def index():
 
 
 if __name__ == '__main__':
-    socketio.run(app, '127.0.0.1', 8080)
+    socketio.run(app, '127.0.0.1', 8080, debug=True)
