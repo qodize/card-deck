@@ -118,7 +118,7 @@ class Groups:
 
     @staticmethod
     @postgres_wrapper
-    def get_group_emojis(cursor, group_id) -> List[Emotion]:
+    def get_group_emotions(cursor, group_id) -> List[Emotion]:
         cursor.execute(f"""
         SELECT e.pk_id, e.user_id, e.value, e.title, e.description, e.ts
         FROM emotions as e
@@ -128,3 +128,15 @@ class Groups:
         """)
         res = cursor.fetchall()
         return [Emotion(*e_args) for e_args in res]
+
+
+class Emotions:
+    @staticmethod
+    @postgres_wrapper
+    def create_emotion(cursor, user_id, value, title='', description='') -> Emotion:
+        cursor.execute(f"""
+        INSERT INTO emotions as e
+        VALUES (DEFAULT, {value}, '{description}', {user_id}, '{title}', {dt.datetime.now()})
+        RETURNING e.pk_id, e.value, e.description, e.user_id, e.title, e.ts""")
+        e_args = cursor.fetchall()[0]
+        return Emotion(*e_args)

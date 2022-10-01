@@ -61,13 +61,28 @@ def create_group():
     return group.__dict__
 
 
-@app.route("/api/groups/<group_id>/emojis")
-def get_group_emojis(group_id):
-    emojis = db_manager.Groups.get_group_emojis(group_id)
-    e_dicts = [e.__dict__ for e in emojis]
+@app.route("/api/groups/<group_id>/emotions")
+def get_group_emotions(group_id):
+    emotions = db_manager.Groups.get_group_emotions(group_id)
+    e_dicts = [e.__dict__ for e in emotions]
     for e in e_dicts:
         e['ts'] = e['ts'].isoformat()
-    return {'emojis': e_dicts}
+    return {'emotions': e_dicts}
+
+
+@app.route("/api/emotions", methods=['POST'])
+def create_emotion():
+    data = fl.request.json
+    user_id = data.get('user_id')
+    value = data.get('value')
+    title = data.get('title', '')
+    description = data.get('description', '')
+    if not user_id or not value:
+        return fl.Response(status=400)
+    e = db_manager.Emotions.create_emotion(user_id, value, title, description)
+    e_data = e.__dict__
+    e_data['ts'] = e_data['ts'].isoformat()
+    return e_data
 
 
 if __name__ == '__main__':
