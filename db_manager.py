@@ -111,4 +111,7 @@ class Groups:
         RETURNING pk_id, owner_id
         """)
         group_args = cursor.fetchall()
+        cursor.execute(f"""
+        INSERT INTO user_to_group VALUES ({group_args[1]}, {group_args[0]})
+        """)
         return Group(*group_args)

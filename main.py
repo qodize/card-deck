@@ -4,6 +4,8 @@ import logging
 
 import flask as fl
 import flask_socketio as fl_sock
+import psycopg2
+
 import config
 import db_manager
 
@@ -50,10 +52,12 @@ def get_group_users(group_id):
 @app.route("/api/groups/", methods=['POST'])
 def create_group():
     data = fl.request.json
-    owner_id = data.get('owner_id')
-    if not owner_id:
+    owner_id = data.get('owner_id', -1)
+    try:
+        group = db_manager.Groups.create(owner_id)
+    except psycopg2.Error as e:
+        logging.error(e)
         return fl.Response(status=400)
-    group = db_manager.Groups.create(owner_id)
     return group.__dict__
 
 
