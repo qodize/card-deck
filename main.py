@@ -61,5 +61,14 @@ def create_group():
     return group.__dict__
 
 
+@app.route("/api/groups/<group_id>/emojis")
+def get_group_emojis(group_id):
+    emojis = db_manager.Groups.get_group_emojis(group_id)
+    e_dicts = [e.__dict__ for e in emojis]
+    for e in e_dicts:
+        e['ts'] = e['ts'].isoformat()
+    return {'emojis': e_dicts}
+
+
 if __name__ == '__main__':
     socketio.run(app, '127.0.0.1', 8080, debug=True)

@@ -35,7 +35,7 @@ class Emotion:
     value: int
     title: str
     description: str
-    timestamp: dt.datetime
+    ts: dt.datetime
 
 
 @dataclasses.dataclass
@@ -115,3 +115,16 @@ class Groups:
         INSERT INTO user_to_group VALUES ({group_args[1]}, {group_args[0]})
         """)
         return Group(*group_args)
+
+    @staticmethod
+    @postgres_wrapper
+    def get_group_emojis(cursor, group_id) -> List[Emotion]:
+        cursor.execute(f"""
+        SELECT e.pk_id, e.user_id, e.value, e.title, e.description, e.ts
+        FROM emotions as e
+        JOIN user_to_group as utg ON e.user_id = utg.user_id
+        WHERE utg.group_id = {group_id}
+        ORDER BY e.ts
+        """)
+        res = cursor.fetchall()
+        return [Emotion(*e_args) for e_args in res]
