@@ -72,20 +72,17 @@ def get_group_emotions(group_id):
 
 @app.route("/api/emotions", methods=['POST'])
 def create_emotion():
-    try:
-        data = fl.request.json
-        user_id = data.get('user_id')
-        value = data.get('value')
-        title = data.get('title', '')
-        description = data.get('description', '')
-        if user_id is None or value is None:
-            return fl.Response(status=400)
-        e = db_manager.Emotions.create_emotion(user_id, value, title, description)
-        e_data = e.__dict__
-        e_data['ts'] = e_data['ts'].isoformat()
-        return e_data
-    except Exception as e:
-        return f"{e.with_traceback()}"
+    data = fl.request.json
+    user_id = data.get('user_id')
+    value = data.get('value')
+    title = data.get('title', '')
+    description = data.get('description', '')
+    if user_id is None or value is None:
+        return fl.Response(status=400)
+    e = db_manager.Emotions.create_emotion(user_id, value, title, description)
+    e_data = e.__dict__
+    e_data['ts'] = e_data['ts'].isoformat()
+    return e_data
 
 
 if __name__ == '__main__':
