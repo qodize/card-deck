@@ -78,7 +78,7 @@ def create_emotion():
         value = data.get('value')
         title = data.get('title', '')
         description = data.get('description', '')
-        if not user_id or not value:
+        if user_id is None or value is None:
             return fl.Response(status=400)
         e = db_manager.Emotions.create_emotion(user_id, value, title, description)
         e_data = e.__dict__
