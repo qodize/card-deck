@@ -80,14 +80,26 @@ class Users:
         id_ = cursor.fetchall()[0][0]
         return User(id_, phone, username)
 
-
-class Groups:
     @staticmethod
     @postgres_wrapper
-    def get(cursor, user_id: int) -> List[Group]:
+    def get_user_groups(cursor, user_id: int) -> List[Group]:
         cursor.execute(f"""
         SELECT groups.pk_id, owner_id
         FROM user_to_group JOIN groups ON group_id = groups.pk_id
         WHERE user_id = {user_id}
         """)
         return [Group(*group_args) for group_args in cursor.fetchall()]
+
+
+class Groups:
+    @staticmethod
+    @postgres_wrapper
+    def get_group_users(cursor, group_id: int) -> List[User]:
+        cursor.execute(f"""
+        SELECT users.pk_id, users.phone, users.username
+        FROM user_to_group JOIN users ON user_id = users.pk_id
+        WHERE group_id = {group_id}
+        """)
+        return [User(*user_args) for user_args in cursor.fetchall()]
+
+

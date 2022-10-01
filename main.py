@@ -37,9 +37,15 @@ def get_user(phone):
 
 
 @app.route('/api/users/<user_id>/groups', methods=['GET'])
-def get_groups(user_id):
-    groups = db_manager.Groups.get(user_id)
+def get_user_groups(user_id):
+    groups = db_manager.Users.get_user_groups(user_id)
     return {'groups': [group.__dict__ for group in groups]}
+
+
+@app.route('/api/groups/<group_id>/users', methods=['GET'])
+def get_group_users(group_id):
+    users = db_manager.Groups.get_group_users(group_id)
+    return {'users': [user.__dict__ for user in users]}
 
 
 if __name__ == '__main__':
