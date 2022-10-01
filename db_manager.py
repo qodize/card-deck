@@ -136,7 +136,7 @@ class Emotions:
     def create_emotion(cursor, user_id, value, title='', description='') -> Emotion:
         cursor.execute(f"""
         INSERT INTO emotions as e
-        VALUES (DEFAULT, {value}, '{description}', {user_id}, '{title}', {dt.datetime.now()})
+        VALUES (DEFAULT, {value}, '{description}', {user_id}, '{title}', '{dt.datetime.now()}')
         RETURNING e.pk_id, e.value, e.description, e.user_id, e.title, e.ts""")
         e_args = cursor.fetchall()[0]
         return Emotion(*e_args)
