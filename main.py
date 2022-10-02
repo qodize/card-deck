@@ -54,7 +54,7 @@ def get_user_groups(phone):
             user['last_emotion_value'] = db_manager.Emotions.get_last_emotion_value(user['id'])
 
         for user in group.users:
-            user['all_emotions'] = get_group_emotions(user['id'])
+            user['all_emotions'] = db_manager.Users.get_emotions_values(user['id'])
 
     print({'groups': [group.__dict__ for group in groups]})
     return {'groups': [group.__dict__ for group in groups]}
