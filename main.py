@@ -50,6 +50,7 @@ def get_user_groups(user_id):
         group.users = db_manager.Groups.get_group_users(group.id)
         for user in group.users:
             user.last_emotion_value = db_manager.Emotions.get_last_emotion_value(user.id)
+    print({'groups': [group.__dict__ for group in groups]})
     return {'groups': [group.__dict__ for group in groups]}
 
 
