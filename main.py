@@ -72,19 +72,28 @@ def get_group_emotions(group_id):
     return {'emotions': e_dicts}
 
 
-@app.route("/api/emotions", methods=['POST'])
+@app.route("/api/emotions", methods=['GET', 'POST'])
 def create_emotion():
-    data = fl.request.json
-    user_id = data.get('user_id')
-    value = data.get('value')
-    title = data.get('title', '')
-    description = data.get('description', '')
-    if user_id is None or value is None:
-        return fl.Response(status=400)
-    e = db_manager.Emotions.create_emotion(user_id, value, title, description)
-    e_data = e.__dict__
-    e_data['ts'] = e_data['ts'].isoformat()
-    return e_data
+    if fl.request.method == 'POST':
+        data = fl.request.json
+        user_id = data.get('user_id')
+        value = data.get('value')
+        title = data.get('title', '')
+        description = data.get('description', '')
+        if user_id is None or value is None:
+            return fl.Response(status=400)
+        e = db_manager.Emotions.create_emotion(user_id, value, title, description)
+        e_data = e.__dict__
+        e_data['ts'] = e_data['ts'].isoformat()
+        return e_data
+    elif fl.request.method == 'GET':
+        emotions_list = db_manager.Emotions.get_all_emotions()
+        emotions_dict = dict()
+        for emotion in emotions_list:
+            emotions_dict[emotion.user_id] = emotions_dict.get(emotion.user_id, []) + [emotion.__dict__]
+        for emotion in emotions_dict.values():
+            emotion['ts'] = emotion['ts'].isoformat()
+        return emotions_dict
 
 
 if __name__ == '__main__':

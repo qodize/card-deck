@@ -140,3 +140,12 @@ class Emotions:
         RETURNING e.pk_id, e.value, e.description, e.user_id, e.title, e.ts""")
         e_args = cursor.fetchall()[0]
         return Emotion(*e_args)
+
+    @staticmethod
+    @postgres_wrapper
+    def get_all_emotions(cursor) -> List[Emotion]:
+        cursor.execute(f"""
+        SELECT * FROM emotions
+        """)
+        res = cursor.fetchall()
+        return [Emotion(*e_args) for e_args in res]
