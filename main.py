@@ -73,7 +73,7 @@ def get_group_emotions(group_id):
 
 
 @app.route("/api/emotions", methods=['GET', 'POST'])
-def create_emotion():
+def emotions_handler():
     if fl.request.method == 'POST':
         data = fl.request.json
         user_id = data.get('user_id')
@@ -85,6 +85,7 @@ def create_emotion():
         e = db_manager.Emotions.create_emotion(user_id, value, title, description)
         e_data = e.__dict__
         e_data['ts'] = e_data['ts'].isoformat()
+        socketio.emit('emotion_created', e_data)
         return e_data
     elif fl.request.method == 'GET':
         emotions_list = db_manager.Emotions.get_all_emotions()
@@ -95,6 +96,16 @@ def create_emotion():
             for emotion in emotion_ls:
                 emotion['ts'] = emotion['ts'].isoformat()
         return emotions_dict
+
+
+@socketio.on('connect')
+def connect():
+    fl_sock.emit('connect', 'Connected')
+
+
+@socketio.on('disconnect')
+def disconnect():
+    print('Disconnected')
 
 
 if __name__ == '__main__':
