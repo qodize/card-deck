@@ -82,7 +82,11 @@ class Users:
 
     @staticmethod
     @postgres_wrapper
-    def get_user_groups(cursor, user_id: int) -> List[Group]:
+    def get_user_groups(cursor, phone: str) -> List[Group]:
+        cursor.execute(f"""
+        SELECT pk_id FROM users WHERE phone like '{phone}'
+        """)
+        user_id = cursor.fetchall()[0][0]
         cursor.execute(f"""
         SELECT groups.pk_id, owner_id
         FROM user_to_group JOIN groups ON group_id = groups.pk_id

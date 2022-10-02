@@ -43,9 +43,9 @@ def get_user(phone):
     return user.__dict__ if user else fl.Response(status=404)
 
 
-@app.route('/api/users/<user_id>/groups', methods=['GET'])
-def get_user_groups(user_id):
-    groups = db_manager.Users.get_user_groups(user_id)
+@app.route('/api/users/<phone>/groups', methods=['GET'])
+def get_user_groups(phone):
+    groups = db_manager.Users.get_user_groups(phone)
     for group in groups:
         group.users = db_manager.Groups.get_group_users(group.id)
         for i in range(len(group.users)):
