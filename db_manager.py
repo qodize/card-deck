@@ -96,7 +96,11 @@ class Users:
         cursor.execute(f"""
         SELECT pk_id FROM users WHERE phone like '{phone}'
         """)
-        user_id = cursor.fetchall()[0][0]
+        res = cursor.fetchall()
+        if not res:
+            cursor.execute(f"""INSERT INTO users VALUES (DEFAULT, {phone}, 'unknown') RETURNING pk_id""")
+            res = cursor.fetchall()
+        user_id = res[0][0]
         cursor.execute(f"""
         SELECT groups.pk_id, owner_id
         FROM user_to_group JOIN groups ON group_id = groups.pk_id
