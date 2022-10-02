@@ -137,7 +137,11 @@ class Groups:
 class Emotions:
     @staticmethod
     @postgres_wrapper
-    def create_emotion(cursor, user_id, value, title='', description='') -> Emotion:
+    def create_emotion(cursor, phone, value, title='', description='') -> Emotion:
+        cursor.execute(f"""
+                SELECT pk_id FROM users WHERE phone like '{phone}'
+                """)
+        user_id = cursor.fetchall()[0][0]
         cursor.execute(f"""
         INSERT INTO emotions as e
         VALUES (DEFAULT, {value}, '{description}', {user_id}, '{title}', '{dt.datetime.now()}')

@@ -88,13 +88,13 @@ def get_group_emotions(group_id):
 def emotions_handler():
     if fl.request.method == 'POST':
         data = fl.request.json
-        user_id = data.get('user_id')
+        phonenumber = data.get('user_id')
         value = data.get('value')
         title = data.get('title', '')
         description = data.get('description', '')
-        if user_id is None or value is None:
+        if phonenumber is None or value is None:
             return fl.Response(status=400)
-        e = db_manager.Emotions.create_emotion(user_id, value, title, description)
+        e = db_manager.Emotions.create_emotion(phonenumber, value, title, description)
         e_data = e.__dict__
         e_data['ts'] = e_data['ts'].isoformat()
         socketio.emit('emotion_created', e_data)
