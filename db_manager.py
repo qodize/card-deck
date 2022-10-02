@@ -66,7 +66,10 @@ class Users:
         cursor.execute(f"SELECT pk_id, phone, username FROM users WHERE phone = '{phone}'")
         res = cursor.fetchall()
         if res:
-            return User(*res[0])
+            user = User(*res[0])
+            cursor.execute(f"SELECT e.value FROM emotions as e WHERE user_id = {user.id} ORDER BY e.ts ASC")
+            user.all_emotions = [e[0] for e in cursor.fetchall()]
+            return user
         else:
             None
 
