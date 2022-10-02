@@ -62,6 +62,13 @@ class Users:
 
     @staticmethod
     @postgres_wrapper
+    def get_emotions_values(cursor, user_id):
+        cursor.execute(f"""SELECT e.value FROM emotions as e WHERE user_id = {user_id} ORDER BY e.ts ASC""")
+        res = cursor.fetchall()
+        return [r[0] for r in res]
+
+    @staticmethod
+    @postgres_wrapper
     def get(cursor, phone: str) -> User or None:
         cursor.execute(f"SELECT pk_id, phone, username FROM users WHERE phone = '{phone}'")
         res = cursor.fetchall()
