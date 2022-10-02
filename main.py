@@ -28,7 +28,13 @@ socketio = fl_sock.SocketIO(app, async_mode=async_mode, path='socket.io', cors_a
 
 @app.route('/')
 def index():
-    return f'{db_manager.ping()}'
+    return """<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('connect', function() {
+        socket.emit('my event', {data: 'I\'m connected!'});
+    });
+</script>"""
 
 
 @app.route('/api/users/<phone>', methods=['GET'])
