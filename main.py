@@ -91,8 +91,9 @@ def create_emotion():
         emotions_dict = dict()
         for emotion in emotions_list:
             emotions_dict[emotion.user_id] = emotions_dict.get(emotion.user_id, []) + [emotion.__dict__]
-        for emotion in emotions_dict.values():
-            emotion['ts'] = emotion['ts'].isoformat()
+        for emotion_ls in emotions_dict.values():
+            for emotion in emotion_ls:
+                emotion['ts'] = emotion['ts'].isoformat()
         return emotions_dict
 
 
