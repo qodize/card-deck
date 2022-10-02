@@ -124,7 +124,7 @@ class Groups:
         FROM emotions as e
         JOIN user_to_group as utg ON e.user_id = utg.user_id
         WHERE utg.group_id = {group_id}
-        ORDER BY e.ts
+        ORDER BY e.ts DESC
         """)
         res = cursor.fetchall()
         return [Emotion(*e_args) for e_args in res]
@@ -149,3 +149,19 @@ class Emotions:
         """)
         res = cursor.fetchall()
         return [Emotion(*e_args) for e_args in res]
+
+    @staticmethod
+    @postgres_wrapper
+    def get_last_emotion_value(cursor, user_id: int) -> int:
+        cursor.execute(f"""
+        SELECT e.value
+        FROM emotions as e
+        WHERE e.user_id = {user_id}
+        ORDER BY e.ts DESC
+        LIMIT 1
+        """)
+        res = cursor.fetchall()
+        if res:
+            return res[0][0]
+        else:
+            return 0
