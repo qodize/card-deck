@@ -23,7 +23,7 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 socketio = fl_sock.SocketIO(app, async_mode=async_mode, path='socket.io', cors_allowed_origins=["http://127.0.0.1:8080",
                                                                                         "http://localhost:4200",
                                                                                         "http://localhost:4201",
-                                                                                        "https://gusev.vladislav.ru"])
+                                                                                        "https://gusev-vladislav.ru"])
 
 
 @app.route('/')
